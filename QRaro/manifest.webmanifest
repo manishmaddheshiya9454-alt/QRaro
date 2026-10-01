@@ -1,0 +1,17 @@
+{
+  "name": "QRora – Smart QR Studio",
+  "short_name": "QRora",
+  "description": "Create, customize and scan QR codes for text, links, images and more with QRora.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#1d1b38",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

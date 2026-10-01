@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Create, customize and scan QR codes for text, links, images and more with QRora."
+    />
+    <meta property="og:title" content="QRora – Smart QR Code Generator & Scanner" />
+    <meta
+      property="og:description"
+      content="Create, customize and scan QR codes for text, links, images and more with QRora."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#1d1b38" />
+    <title>QRora – Smart QR Code Generator & Scanner</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" id="top">
+        <div class="container nav-wrap">
+          <a href="#top" class="brand" aria-label="QRora homepage">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="img" aria-label="QRora logo">
+                <defs>
+                  <linearGradient id="brandGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                    <stop offset="0%" stop-color="#5b6cff" />
+                    <stop offset="100%" stop-color="#3fd0ff" />
+                  </linearGradient>
+                </defs>
+                <rect x="5" y="5" width="54" height="54" rx="16" fill="url(#brandGradient)" opacity="0.12"/>
+                <g fill="#2a2647">
+                  <rect x="10" y="10" width="10" height="10" rx="2"/>
+                  <rect x="44" y="10" width="10" height="10" rx="2"/>
+                  <rect x="10" y="44" width="10" height="10" rx="2"/>
+                  <rect x="20" y="10" width="5" height="5" rx="1"/>
+                  <rect x="31" y="10" width="5" height="5" rx="1"/>
+                  <rect x="38" y="20" width="5" height="5" rx="1"/>
+                  <rect x="20" y="20" width="5" height="5" rx="1"/>
+                  <rect x="32" y="20" width="5" height="5" rx="1"/>
+                  <rect x="44" y="20" width="5" height="5" rx="1"/>
+                  <rect x="20" y="31" width="5" height="5" rx="1"/>
+                  <rect x="31" y="31" width="5" height="5" rx="1"/>
+                  <rect x="38" y="31" width="5" height="5" rx="1"/>
+                  <rect x="20" y="44" width="5" height="5" rx="1"/>
+                  <rect x="31" y="44" width="5" height="5" rx="1"/>
+                  <rect x="38" y="44" width="5" height="5" rx="1"/>
+                  <rect x="44" y="38" width="5" height="5" rx="1"/>
+                  <circle cx="50" cy="50" r="4" fill="url(#brandGradient)"/>
+                </g>
+              </svg>
+            </span>
+            <span class="brand-word">QRora</span>
+          </a>
+
+          <nav class="main-nav" aria-label="Main navigation">
+            <a href="#top">Home</a>
+            <a href="#creator">Create QR</a>
+            <a href="#scanner">Scan</a>
+            <a href="#my-qr">My QR</a>
+            <a href="#features">Features</a>
+          </nav>
+
+          <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+              <span class="toggle-icon">☀️</span>
+            </button>
+            <button class="btn btn-ghost" id="signInBtn" type="button">Sign In</button>
+            <button class="btn btn-primary" id="getStartedBtn" type="button">Get Started</button>
+            <button class="menu-toggle" id="menuBtn" type="button" aria-label="Toggle navigation menu">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero section-space">
+          <div class="container hero-grid">
+            <div class="hero-copy reveal-up">
+              <span class="eyebrow">Create. Scan. Share.</span>
+              <h1>Create Smarter QR Codes</h1>
+              <p>
+                Turn text, links and images into beautiful QR codes — and scan QR codes back into usable content.
+              </p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#creator">Create QR</a>
+                <a class="btn btn-secondary" href="#scanner">Scan QR</a>
+              </div>
+              <div class="trust-row" aria-label="Product highlights">
+                <span>✓ Custom Design</span>
+                <span>✓ Instant Download</span>
+                <span>✓ Camera Scanner</span>
+                <span>✓ Image Support</span>
+              </div>
+            </div>
+
+            <div class="hero-art reveal-up delay-1">
+              <div class="hero-visual">
+                <div class="floating-tag tag-one">Custom</div>
+                <div class="floating-tag tag-two">Ready</div>
+                <div class="floating-tag tag-three">Fast</div>
+                <div class="qr-orb"></div>
+                <div class="qr-canvas-wrap" id="heroQrPreview"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="creator section-space" id="creator">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">QR Creator</span>
+              <h2>Build your QR in seconds</h2>
+            </div>
+
+            <div class="creator-shell glass-panel">
+              <div class="creator-layout">
+                <div class="creator-main">
+                  <div class="type-tabs" id="typeTabs" aria-label="QR type selector"></div>
+                  <div id="dynamicForm" class="dynamic-form"></div>
+                </div>
+
+                <aside class="creator-side">
+                  <div class="preview-card">
+                    <div class="preview-header">
+                      <h3>Live Preview</h3>
+                      <span id="previewTypeBadge" class="status-pill">Text</span>
+                    </div>
+                    <div id="qrPreview" class="qr-preview-box"></div>
+                    <div class="preview-meta">
+                      <div>
+                        <small>Color</small>
+                        <strong id="previewColorText">#111827 / #ffffff</strong>
+                      </div>
+                      <div>
+                        <small>Style</small>
+                        <strong id="previewStyleText">Rounded</strong>
+                      </div>
+                    </div>
+                    <div class="action-grid dense">
+                      <button class="btn btn-primary" type="button" id="generateBtn">Generate QR</button>
+                      <button class="btn btn-ghost" type="button" id="copyContentBtn">Copy Content</button>
+                    </div>
+                    <div class="action-grid dense">
+                      <button class="btn btn-ghost" type="button" id="downloadPngBtn">Download PNG</button>
+                      <button class="btn btn-ghost" type="button" id="downloadSvgBtn">Download SVG</button>
+                    </div>
+                    <div class="action-grid dense">
+                      <button class="btn btn-ghost" type="button" id="downloadPdfBtn">Download PDF</button>
+                      <button class="btn btn-ghost" type="button" id="shareQrBtn">Share</button>
+                    </div>
+                  </div>
+
+                  <div class="customizer glass-panel small-panel">
+                    <div class="panel-title-row">
+                      <h3>Customize</h3>
+                    </div>
+
+                    <div class="customizer-grid">
+                      <label>
+                        Foreground
+                        <input type="color" id="fgColor" value="#111827" />
+                      </label>
+                      <label>
+                        Background
+                        <input type="color" id="bgColor" value="#ffffff" />
+                      </label>
+                    </div>
+
+                    <label>
+                      QR Shape
+                      <select id="shapeSelect">
+                        <option value="square">Square</option>
+                        <option value="rounded" selected>Rounded</option>
+                        <option value="dots">Dots</option>
+                        <option value="smooth">Smooth</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      Eye Style
+                      <select id="eyeSelect">
+                        <option value="square">Square</option>
+                        <option value="rounded" selected>Rounded</option>
+                        <option value="circle">Circle</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      Size
+                      <select id="sizeSelect">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      Margin
+                      <input type="range" id="marginRange" min="0" max="30" value="10" />
+                    </label>
+
+                    <div class="upload-box">
+                      <label for="logoUpload" class="upload-label">Upload center logo</label>
+                      <input type="file" id="logoUpload" accept="image/*" />
+                      <small>Large logos can reduce scan reliability.</small>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scanner section-space" id="scanner">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">QR Decoder</span>
+              <h2>Scan or upload a QR code</h2>
+            </div>
+
+            <div class="scanner-shell glass-panel">
+              <div class="scanner-layout">
+                <div class="scan-panel">
+                  <div class="scan-header">
+                    <h3>Camera Scan</h3>
+                    <button class="btn btn-primary" id="startCameraBtn" type="button">Start Camera</button>
+                  </div>
+                  <div class="camera-box">
+                    <video id="cameraPreview" autoplay playsinline muted></video>
+                    <div class="camera-overlay" aria-hidden="true"></div>
+                    <div class="empty-camera" id="cameraPlaceholder">Camera preview will appear here.</div>
+                  </div>
+                </div>
+
+                <div class="upload-panel">
+                  <div class="scan-header">
+                    <h3>Upload QR Image</h3>
+                  </div>
+                  <label class="dropzone" for="decodeUpload">
+                    <input type="file" id="decodeUpload" accept="image/png,image/jpeg,image/jpg,image/webp" />
+                    <span>Drop QR image here or click to upload</span>
+                  </label>
+                  <div id="decodeResult" class="decode-result empty-state">
+                    <p>No QR decoded yet. Upload a clear image or scan with your camera.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="how-it-works section-space">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">How it works</span>
+              <h2>Simple steps, powerful results</h2>
+            </div>
+            <div class="steps-grid">
+              <article class="feature-card glass-panel">
+                <span class="step-index">01</span>
+                <h3>Choose QR type</h3>
+                <p>Pick a format that matches your content, from text and URLs to Wi‑Fi and contact profiles.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <span class="step-index">02</span>
+                <h3>Enter or upload</h3>
+                <p>Add your text, file, or image, then preview the final QR code instantly on the live editor.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <span class="step-index">03</span>
+                <h3>Customize</h3>
+                <p>Fine-tune colors, shapes, margin, and a centered logo before exporting.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <span class="step-index">04</span>
+                <h3>Share or download</h3>
+                <p>Export PNG, SVG, or PDF and share via link, copy, or native mobile share methods.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="features section-space" id="features">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Features</span>
+              <h2>Built for speed, clarity and quality</h2>
+            </div>
+            <div class="feature-grid">
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">⚡</div>
+                <h3>Instant generation</h3>
+                <p>Generate clean QR code previews without reloading the page or leaving your flow.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">📷</div>
+                <h3>Camera + image scan</h3>
+                <p>Decode using your camera or upload a QR image from your device with clear feedback.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">🎨</div>
+                <h3>Smart customization</h3>
+                <p>Adjust color, eye style, dots, size, and branding to create polished QR assets.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">🔐</div>
+                <h3>Privacy-first</h3>
+                <p>User content remains local unless you explicitly choose a share or upload workflow.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">📦</div>
+                <h3>Multi-format export</h3>
+                <p>Download PNG, SVG, or PDF with a polished presentation for personal or business use.</p>
+              </article>
+              <article class="feature-card glass-panel">
+                <div class="icon-pill">🧠</div>
+                <h3>Beginner friendly</h3>
+                <p>Clear labels, empty states, tooltips, and tone-friendly error handling make adoption easy.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="use-cases section-space">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Use cases</span>
+              <h2>From everyday moments to business workflows</h2>
+            </div>
+            <div class="use-grid">
+              <div class="use-item glass-panel">Students</div>
+              <div class="use-item glass-panel">Businesses</div>
+              <div class="use-item glass-panel">Restaurants</div>
+              <div class="use-item glass-panel">Events</div>
+              <div class="use-item glass-panel">Shops</div>
+              <div class="use-item glass-panel">Marketing</div>
+              <div class="use-item glass-panel">Personal use</div>
+              <div class="use-item glass-panel">Education</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="why section-space">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Why QRora?</span>
+              <h2>Professional, fast and simple</h2>
+            </div>
+            <div class="why-grid">
+              <div class="why-item glass-panel"><strong>Fast</strong><p>Build and export QR codes quickly without friction.</p></div>
+              <div class="why-item glass-panel"><strong>Easy</strong><p>Simple steps and guided flows for first-time users.</p></div>
+              <div class="why-item glass-panel"><strong>Secure</strong><p>Privacy-aware processing and local-only data handling by default.</p></div>
+              <div class="why-item glass-panel"><strong>Customizable</strong><p>Create branded QR codes that still scan reliably.</p></div>
+              <div class="why-item glass-panel"><strong>Mobile friendly</strong><p>Works smoothly from phones, tablets, and desktops.</p></div>
+              <div class="why-item glass-panel"><strong>Multiple formats</strong><p>Support for text, links, contact details, and more.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq section-space">
+          <div class="container faq-wrap glass-panel">
+            <div class="section-heading left-align">
+              <span class="eyebrow">FAQ</span>
+              <h2>Everything you need to know</h2>
+            </div>
+            <div class="faq-list">
+              <details open>
+                <summary>Can I scan a QR code from my phone camera?</summary>
+                <p>Yes. The camera scanner uses the browser camera API and can decode QR codes live in supported devices.</p>
+              </details>
+              <details>
+                <summary>What file types are supported?</summary>
+                <p>For upload and decoding, QRora supports PNG, JPG, JPEG, and WEBP files.</p>
+              </details>
+              <details>
+                <summary>Can I download a high-resolution QR?</summary>
+                <p>Yes. You can export PNG, SVG, or PDF with a resolution and layout optimized for scannability.</p>
+              </details>
+              <details>
+                <summary>What if my image is too large for a QR code?</summary>
+                <p>Standard QR codes have limited data capacity. For large images, QRora warns you and recommends a shareable reference or hosted file approach.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard section-space" id="dashboard">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Dashboard</span>
+              <h2>Welcome back 👋</h2>
+            </div>
+            <div class="dashboard-grid">
+              <div class="stat-card glass-panel">
+                <span>Total QR Codes</span>
+                <strong id="totalQrStat">0</strong>
+              </div>
+              <div class="stat-card glass-panel">
+                <span>Scans</span>
+                <strong id="totalScansStat">184</strong>
+              </div>
+              <div class="stat-card glass-panel">
+                <span>Favorites</span>
+                <strong id="favoriteStat">0</strong>
+              </div>
+              <div class="stat-card glass-panel">
+                <span>Recent QR</span>
+                <strong id="recentStat">2</strong>
+              </div>
+            </div>
+            <div class="dashboard-actions">
+              <button class="btn btn-primary" type="button" id="dashboardCreateBtn">Create QR</button>
+              <button class="btn btn-secondary" type="button" id="dashboardScanBtn">Scan QR</button>
+              <button class="btn btn-ghost" type="button" id="dashboardUploadBtn">Upload QR</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="analytics section-space">
+          <div class="container analytics-shell glass-panel">
+            <div class="section-heading left-align">
+              <span class="eyebrow">Analytics</span>
+              <h2>Scan insights</h2>
+            </div>
+            <div class="analytics-grid">
+              <div class="analytics-metrics">
+                <div class="metric"><span>Total scans</span><strong>184</strong></div>
+                <div class="metric"><span>Today</span><strong>28</strong></div>
+                <div class="metric"><span>This week</span><strong>96</strong></div>
+                <div class="metric"><span>This month</span><strong>184</strong></div>
+              </div>
+              <div class="chart-card">
+                <h3>Device type</h3>
+                <div class="bars">
+                  <div class="bar-row"><span>Mobile</span><i style="--w: 72%"></i></div>
+                  <div class="bar-row"><span>Desktop</span><i style="--w: 52%"></i></div>
+                  <div class="bar-row"><span>Tablet</span><i style="--w: 28%"></i></div>
+                </div>
+              </div>
+            </div>
+            <p class="analytics-note">
+              Static QR codes do not expose real-time scan analytics. Dynamic QR tracking requires a backend or link-management system.
+            </p>
+          </div>
+        </section>
+
+        <section class="my-qr section-space" id="my-qr">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">My QR</span>
+              <h2>Saved QR library</h2>
+            </div>
+            <div class="library-toolbar">
+              <input type="search" id="historySearch" placeholder="Search QR codes" aria-label="Search QR history" />
+              <select id="historyFilter">
+                <option value="all">All Types</option>
+                <option value="text">Text</option>
+                <option value="url">URL</option>
+                <option value="image">Image</option>
+                <option value="email">Email</option>
+                <option value="phone">Phone</option>
+                <option value="wifi">Wi‑Fi</option>
+                <option value="contact">Contact</option>
+              </select>
+            </div>
+            <div id="historyList" class="history-list"></div>
+            <div id="favoritesList" class="favorites-list"></div>
+          </div>
+        </section>
+
+        <section class="cta section-space">
+          <div class="container cta-box glass-panel">
+            <div>
+              <span class="eyebrow">Ready to create?</span>
+              <h2>Ready to create your first QR?</h2>
+            </div>
+            <a class="btn btn-primary" href="#creator">Create QR Now</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-grid">
+          <div class="footer-branding">
+            <a href="#top" class="brand footer-brand" aria-label="QRora home">
+              <span class="brand-mark small">
+                <svg viewBox="0 0 64 64" role="img" aria-label="QRora logo small">
+                  <defs>
+                    <linearGradient id="brandGradientFooter" x1="0%" x2="100%" y1="0%" y2="100%">
+                      <stop offset="0%" stop-color="#5b6cff" />
+                      <stop offset="100%" stop-color="#3fd0ff" />
+                    </linearGradient>
+                  </defs>
+                  <rect x="5" y="5" width="54" height="54" rx="16" fill="url(#brandGradientFooter)" opacity="0.14"/>
+                  <g fill="#f2f7ff">
+                    <rect x="10" y="10" width="10" height="10" rx="2"/>
+                    <rect x="44" y="10" width="10" height="10" rx="2"/>
+                    <rect x="10" y="44" width="10" height="10" rx="2"/>
+                    <rect x="20" y="10" width="5" height="5" rx="1"/>
+                    <rect x="31" y="10" width="5" height="5" rx="1"/>
+                    <rect x="38" y="20" width="5" height="5" rx="1"/>
+                    <rect x="20" y="20" width="5" height="5" rx="1"/>
+                    <rect x="32" y="20" width="5" height="5" rx="1"/>
+                    <rect x="44" y="20" width="5" height="5" rx="1"/>
+                    <rect x="20" y="31" width="5" height="5" rx="1"/>
+                    <rect x="31" y="31" width="5" height="5" rx="1"/>
+                    <rect x="38" y="31" width="5" height="5" rx="1"/>
+                    <rect x="20" y="44" width="5" height="5" rx="1"/>
+                    <rect x="31" y="44" width="5" height="5" rx="1"/>
+                    <rect x="38" y="44" width="5" height="5" rx="1"/>
+                    <rect x="44" y="38" width="5" height="5" rx="1"/>
+                    <circle cx="50" cy="50" r="4" fill="url(#brandGradientFooter)"/>
+                  </g>
+                </svg>
+              </span>
+              <span class="brand-word">QRora</span>
+            </a>
+            <p>Smart QR Studio for fast, beautiful, secure code creation and scanning.</p>
+          </div>
+
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#top">About</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#my-qr">My QR</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#top">Privacy</a></li>
+              <li><a href="#top">Terms</a></li>
+              <li><a href="#top">Contact</a></li>
+              <li><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>Follow</h4>
+            <ul>
+              <li><a href="https://x.com" target="_blank" rel="noreferrer">X</a></li>
+              <li><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></li>
+              <li><a href="https://dribbble.com" target="_blank" rel="noreferrer">Dribbble</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 QRora. Your Smart QR Studio.</p>
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="modal hidden" id="authModal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-card glass-panel" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+        <button class="close-modal" type="button" data-close-modal aria-label="Close modal">×</button>
+        <div class="modal-header">
+          <span class="eyebrow">Welcome</span>
+          <h3 id="authTitle">Sign in to QRora</h3>
+        </div>
+
+        <div class="auth-tabs" role="tablist" aria-label="Authentication tabs">
+          <button class="auth-tab active" data-auth-tab="signin" type="button">Sign In</button>
+          <button class="auth-tab" data-auth-tab="signup" type="button">Sign Up</button>
+        </div>
+
+        <form id="authForm" class="auth-form">
+          <label>
+            Email
+            <input type="email" id="authEmail" placeholder="you@example.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" id="authPassword" placeholder="••••••••••" required />
+          </label>
+          <label class="hidden" id="confirmPasswordWrap">
+            Confirm password
+            <input type="password" id="confirmPassword" placeholder="Repeat password" />
+          </label>
+          <button type="submit" class="btn btn-primary full-width" id="authSubmitBtn">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+          <button class="link-button" type="button" id="forgotPasswordBtn">Forgot password?</button>
+          <button class="link-button" type="button" id="demoAuthBtn">Continue in demo mode</button>
+        </div>
+      </div>
+    </div>
+
+    <template id="emptyStateTemplate">
+      <div class="empty-state-card">
+        <div class="empty-state-icon">✦</div>
+        <h3>No QR codes yet</h3>
+        <p>Create your first QR code and it will appear here.</p>
+        <button class="btn btn-primary" type="button">Create QR</button>
+      </div>
+    </template>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
